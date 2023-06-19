@@ -24,6 +24,37 @@ if ($farfetched_result == $password) {
 	header("Location: Login.php");
 }
 ?>
+<script>
+let childrenAndIds;
+let i = 0;
+$.get("../DBcleanUpInteract/getUsers.php", function(data1){
+let tempVar = data1.split("&");
+tempVar[0] = tempVar[0].split(',');
+tempVar[1] = tempVar[1].split(',');
+childrenAndIds = tempVar;
+console.log(tempVar);
+});
+
+function addTask(){
+  console.log('US BORDER PATROL');
+  document.getElementById("new_task_div").innerHTML = "<input id='name' placeholder='insert name here'><input type='range' min='0' max='10' id='difficulty' placeholder='insert difficulty here'><input type='time' id='deadlineInput' placeholder='Enter the deadline here'><button onclick='uploadTask()'>Add task</button>";
+}
+function uploadTask(){
+	let name = document.getElementById('name').value;
+	let difficulty = document.getElementById('difficulty').value;
+	let taskDeadline = document.getElementById('deadlineInput').value;
+	<?php echo "let username = '"  . $receivedUsername . "';"; ?>
+	alert(username);
+ $.ajax({
+                    type: "POST",
+                    url: "TaskCreator.php",
+                    data: {taskName: name, taskDifficulty: difficulty, taskCreator: username, deadline: taskDeadline},
+                    success: function(){
+                     console.log("COMING TO EVICT YOU!");
+                    }
+                    });
+}
+</script>
 
 </body>
 </html>

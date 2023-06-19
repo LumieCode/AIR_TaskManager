@@ -1,0 +1,36 @@
+<?php
+$conn = mysqli_connect("localhost", "iva", "12345", "cw");
+date_default_timezone_set('Africa/Cairo');
+// Check for connection errors
+if (mysqli_connect_errno()) {
+    echo "Failed to connect to MySQL: " . mysqli_connect_error();
+    exit();
+}
+
+$receivedTaskName = $_POST['taskName'];
+$receivedDifficulty = $_POST['taskDifficulty'];
+$receivedTaskCreator = $_POST['taskCreator'];
+$current_time = date('H:i:s');
+$deadline = $_POST['deadline'];
+$sql = "INSERT INTO Tasks (`Task name`, Difficulty, TaskCreator, TimeCreated, Deadline) VALUES (?, ?, ?, ?)";
+$stmt = $conn->prepare($sql);
+
+// Check for prepare statement error
+if (!$stmt) {
+    echo "Error preparing statement: " . $conn->error;
+    exit();
+}
+
+$stmt->bind_param("sisss", $receivedTaskName, $receivedDifficulty, $receivedTaskCreator, $current_time, $deadline);
+
+// Execute the statement
+if ($stmt->execute()) {
+    echo "Record inserted successfully.";
+} else {
+    echo "Error inserting record: " . $stmt->error;
+}
+
+// Close the statement and database connection
+$stmt->close();
+$conn->close();
+?>
